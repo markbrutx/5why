@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 Почему</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <style>
+        :root {
+            --background: #282a36;
+            --current-line: #44475a;
+            --foreground: #f8f8f2;
+            --purple: #bd93f9;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+        }
+
+        input::placeholder {
+            color: var(--foreground);
+            opacity: 0.5;
+        }
+
+        @keyframes moveDown {
+            0% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(20px); opacity: 0; }
+            51% { transform: translateY(-20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .move-down {
+            animation: moveDown 0.5s ease-in-out;
+        }
+
+        .dracula-input {
+            background-color: var(--current-line);
+            border: 1px solid var(--current-line);
+            color: var(--foreground);
+        }
+
+        .dracula-input:focus {
+            border-color: var(--purple);
+            box-shadow: 0 0 0 2px rgba(189, 147, 249, 0.2);
+            outline: none;
+        }
+
+        .dracula-button {
+            background-color: var(--current-line);
+            color: var(--foreground);
+            border: 1px solid var(--purple);
+        }
+
+        .dracula-button:hover {
+            background-color: var(--purple);
+            color: var(--background);
+        }
+    </style>
+</head>
+<body class="min-h-screen px-2 py-3 md:p-4">
+    <div class="max-w-3xl mx-auto">
+        <!-- Информационный блок -->
+        <div style="background-color: var(--current-line)" class="rounded-lg px-3 py-4 md:p-6 mb-3 md:mb-6 shadow-lg">
+            <h2 class="text-xl font-bold mb-3">Техника "5 Почему"</h2>
+            <p class="mb-2">Цель: <span class="font-medium">Заменить «пустые» стимулы на осмысленные</span></p>
+            <p class="opacity-80">Используйте эту технику перед тем как:</p>
+            <ul class="list-disc list-inside ml-2 md:ml-4 mt-2 opacity-80">
+                <li>Открыть Telegram</li>
+                <li>Зайти на YouTube</li>
+                <li>Начать игру в соло</li>
+                <li>И другие подобные импульсивные действия</li>
+            </ul>
+        </div>
+
+        <!-- Основной блок с вопросами -->
+        <div style="background-color: var(--current-line)" class="rounded-lg shadow-lg px-3 py-4 md:p-6">
+            <div class="space-y-4 md:space-y-6" id="why-blocks">
+                <!-- Шаблоны будут добавлены через JavaScript -->
+            </div>
+
+            <div class="mt-4 md:mt-6 flex justify-center gap-3">
+                <button onclick="copyAll()" class="dracula-button flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded transition-colors text-sm md:text-base">
+                    <i data-feather="copy"></i>
+                    Скопировать всё
+                </button>
+                <button onclick="clearAll()" class="dracula-button flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded transition-colors text-sm md:text-base">
+                    <i data-feather="trash-2"></i>
+                    Очистить форму
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const examples = [
+            {
+                question: "произошел сбой оборудования",
+                answer: "оно перегрелось"
+            },
+            {
+                question: "оно перегрелось",
+                answer: "сломался кулер"
+            },
+            {
+                question: "сломался кулер",
+                answer: "мы пропустили плановое техобслуживание"
+            },
+            {
+                question: "мы пропустили техобслуживание",
+                answer: "были утеряны бумажные записи о его сроках"
+            },
+            {
+                question: "график обслуживания не автоматизирован",
+                answer: "наши сотрудники не обучены работать с подобной системой"
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('why-blocks');
+            
+            for (let i = 0; i < 5; i++) {
+                const block = document.createElement('div');
+                block.className = 'space-y-2';
+                block.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <div class="flex-grow">
+                            <div class="flex items-center gap-2">
+                                <label for="q-${i+1}" class="whitespace-nowrap">Почему</label>
+                                <input type="text" id="q-${i+1}" 
+                                    class="w-full p-1.5 md:p-2 rounded dracula-input text-sm md:text-base" 
+                                    placeholder="${examples[i].question}">
+                                <span>?</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 ml-4">
+                        <label for="a-${i+1}" class="whitespace-nowrap">Потому что</label>
+                        <input type="text" id="a-${i+1}" 
+                            class="w-full p-1.5 md:p-2 rounded dracula-input text-sm md:text-base" 
+                            placeholder="${examples[i].answer}">
+                        ${i < 4 ? `
+                        <button onclick="moveAnswerDown(${i+1})" class="p-2 rounded dracula-button" title="Использовать как следующий вопрос">
+                            <i data-feather="arrow-down"></i>
+                        </button>
+                        ` : ''}
+                    </div>
+                `;
+                container.appendChild(block);
+            }
+
+            feather.replace();
+        });
+
+        async function moveAnswerDown(index) {
+            if (index >= 5) return;
+            
+            const currentAnswer = document.getElementById(`a-${index}`);
+            const nextQuestion = document.getElementById(`q-${index + 1}`);
+            
+            const answerText = currentAnswer.value || currentAnswer.placeholder;
+            
+            currentAnswer.classList.add('move-down');
+            await new Promise(resolve => setTimeout(resolve, 250));
+            
+            nextQuestion.value = answerText;
+            nextQuestion.focus();
+            
+            await new Promise(resolve => setTimeout(resolve, 250));
+            currentAnswer.classList.remove('move-down');
+        }
+
+        function copyPair(index) {
+            const question = document.getElementById(`q-${index}`).value || document.getElementById(`q-${index}`).placeholder;
+            const answer = document.getElementById(`a-${index}`).value || document.getElementById(`a-${index}`).placeholder;
+            const text = `Почему ${question}? Потому что ${answer}`;
+            
+            copyToClipboard(text);
+            
+            const button = document.querySelector(`button[onclick="copyPair(${index})"]`);
+            button.style.backgroundColor = 'var(--purple)';
+            button.style.color = 'var(--background)';
+            setTimeout(() => {
+                button.style.backgroundColor = 'var(--current-line)';
+                button.style.color = 'var(--foreground)';
+            }, 1000);
+        }
+
+        function copyAll() {
+            let fullText = '';
+            
+            for (let i = 1; i <= 5; i++) {
+                const question = document.getElementById(`q-${i}`).value || document.getElementById(`q-${i}`).placeholder;
+                const answer = document.getElementById(`a-${i}`).value || document.getElementById(`a-${i}`).placeholder;
+                fullText += `${i}. Почему ${question}? Потому что ${answer}\n`;
+            }
+
+            copyToClipboard(fullText);
+            
+            const copyButton = document.querySelector('button[onclick="copyAll()"]');
+            copyButton.style.backgroundColor = 'var(--purple)';
+            copyButton.style.color = 'var(--background)';
+            setTimeout(() => {
+                copyButton.style.backgroundColor = 'var(--current-line)';
+                copyButton.style.color = 'var(--foreground)';
+            }, 1000);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+
+        function clearAll() {
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`q-${i}`).value = '';
+                document.getElementById(`a-${i}`).value = '';
+            }
+            document.getElementById('q-1').focus();
+        }
+    </script>
+</body>
+</html>
