@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>5 Whys</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="favs/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favs/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="favs/apple-touch-icon.png">
+    <link rel="manifest" href="favs/site.webmanifest">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
     <style>
@@ -213,7 +217,7 @@
                                 <label for="q-${i+1}" class="whitespace-nowrap">${t.why}</label>
                                 <input type="text" id="q-${i+1}" 
                                     class="w-full p-1.5 md:p-2 rounded dracula-input text-sm md:text-base" 
-                                    placeholder="${t.placeholders[i].question}">
+                                    autocomplete="off" placeholder="${t.placeholders[i].question}">
                                 <span>?</span>
                             </div>
                         </div>
@@ -222,7 +226,7 @@
                         <label for="a-${i+1}" class="whitespace-nowrap">${t.because}</label>
                         <input type="text" id="a-${i+1}" 
                             class="w-full p-1.5 md:p-2 rounded dracula-input text-sm md:text-base" 
-                            placeholder="${t.placeholders[i].answer}">
+                            autocomplete="off" placeholder="${t.placeholders[i].answer}">
                         ${i < 4 ? `
                         <button onclick="moveAnswerDown(${i+1})" class="p-2 rounded dracula-button" title="${currentLang === 'en' ? 'Use as next question' : 'Использовать как следующий вопрос'}">
                             <i data-feather="arrow-down"></i>
